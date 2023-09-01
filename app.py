@@ -26,13 +26,13 @@ def graph_map(indicator='Sensitivit'):
     
     return fig
 
-dropdown = dbc.Select(
+dropdown = dbc.Col(dbc.Select(
     id = 'feature_drop',
     options = [{'label':i,'value':i} for i in list(gdf.columns)],
     value =  'Sensitivit'
-)
+),width=6)
 
-map = dcc.Graph(figure=graph_map(), id='ch_map')
+map = dbc.Col(dcc.Graph(figure=graph_map(), id='ch_map'),width=6)
 
 app = dash.Dash(__name__,
                 meta_tags=[{"name": "viewport", "content": "width=device-width, initial-scale=1.0"}, {
