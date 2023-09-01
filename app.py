@@ -10,7 +10,7 @@ import json
 
 with open('richmond.geojson') as response:
     geojson = json.load(response)
-gdf = gdp.read_file('richmond.geojson')
+gdf = gdp.read_file('/home/gumaer/BTH_Dash/richmond.geojson')
 
 
 def graph_map(indicator='Sensitivit'):
