@@ -8,8 +8,8 @@ import dash_bootstrap_components as dbc
 from urllib.request import urlopen
 import json
 
-with open('richmond.geojson') as response:
-    geojson = json.load(response)
+response = urlopen('https://raw.githubusercontent.com/jgumaer/BTH_Dash/main/richmond.geojson')
+geojson = json.loads(response.read())
 gdf = gdp.read_file('https://raw.githubusercontent.com/jgumaer/BTH_Dash/main/richmond.geojson')
 
 
@@ -74,4 +74,4 @@ def change_feature(drop_v):
     return graph_map(drop_v)
 
 if __name__ == "__main__":
-    app.run_server(host="0.0.0.0", port=80, debug=True)
+    app.run_server(debug=True)
