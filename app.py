@@ -11,7 +11,9 @@ import json
 response = urlopen('https://raw.githubusercontent.com/jgumaer/BTH_Dash/main/richmond.geojson')
 geojson = json.loads(response.read())
 gdf = gdp.read_file('https://raw.githubusercontent.com/jgumaer/BTH_Dash/main/richmond.geojson')
-
+gdf_trees = gdp.read_file('https://raw.githubusercontent.com/jgumaer/BTH_Dash/main/trees2.geojson')
+tree_response = urlopen('https://raw.githubusercontent.com/jgumaer/BTH_Dash/main/trees2.geojson')
+geojson_tree = json.loads(tree_response.read())
 
 def graph_map(indicator='Sensitivit'):
     fig = px.choropleth_mapbox(gdf, geojson=geojson, color=indicator,
@@ -32,7 +34,48 @@ dropdown = dbc.Col(dbc.Select(
     value =  'Sensitivit'
 ),width=6)
 
+priority_section = dbc.Col([
+    dbc.Accordion(
+        dbc.AccordionItem(
+            dbc.Col([
+                dbc.Row(
+                    dbc.Checklist(
+                        options = [{'label':'Priority 1', 'value':'1'}],
+                        id="priority-1-check",
+                        switch=True
+                    )
+                ),
+                dbc.Row(dbc.Col(html.Div(
+                    dcc.Slider(
+                        min=0,
+                        max=100,
+                        step=10,
+                        value=50
+                    ),id="slider-test-1",hidden=True),width=6)
+                ),
+                dbc.Row(
+                    dbc.Checklist(
+                        options = [{'label':'Priority 2', 'value':'2'}],
+                        id="priority-2-check",
+                        switch=True
+                    )
+                ),
+                dbc.Row(dbc.Col(html.Div(
+                    dcc.Slider(
+                        min=0,
+                        max=100,
+                        step=10,
+                        value=50
+                    ),id="slider-test-2",hidden=True),width=6)
+                )
+            ]),title="Select Priority Areas"
+        ),start_collapsed=True
+    )
+],width=6)
+
 map = dbc.Col(dcc.Graph(figure=graph_map(), id='ch_map'),width=6)
+
+test_text = html.Div(id="text-check")
 
 app = dash.Dash(__name__,
                 meta_tags=[{"name": "viewport", "content": "width=device-width, initial-scale=1.0"}, {
@@ -63,7 +106,7 @@ app.index_string = '''
 </html>
 '''
 
-app.layout = html.Div([dropdown,map])
+app.layout = html.Div([priority_section,map,dropdown,test_text])
 
 @app.callback(
     Output('ch_map','figure'),
@@ -72,6 +115,32 @@ app.layout = html.Div([dropdown,map])
 
 def change_feature(drop_v):
     return graph_map(drop_v)
+
+@app.callback(
+    Output('slider-test-1','hidden'),
+    Input('priority-1-check','value')
+)
+
+def show_slider_1(check_v):
+    if check_v is None:
+        return True
+    elif check_v == []:
+        return True
+    else:
+        return False
+    
+@app.callback(
+    Output('slider-test-2','hidden'),
+    Input('priority-2-check','value')
+)
+
+def show_slider_2(check_v):
+    if check_v is None:
+        return True
+    elif check_v == []:
+        return True
+    else:
+        return False
 
 if __name__ == "__main__":
     app.run_server(debug=True)
