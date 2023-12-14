@@ -42,8 +42,8 @@ df_temp["AVG_PM_HI"] = pd.qcut(gdf["AVG_PM_HI"], 5, labels=False)
 
 def graph_map(indicator='PER_O65',layer=[]):
     fig = px.choropleth_mapbox(gdf, geojson=geojson, color=indicator,
-                           featureidkey="properties.GEOID20",
-                           locations="GEOID20",
+                           featureidkey="properties.GEOID10",
+                           locations="GEOID10",
                            color_continuous_scale="Viridis",
                            mapbox_style="carto-positron",
                            zoom=11, center = {"lat": 39.8289, "lon": -84.8902},

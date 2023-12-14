@@ -33,7 +33,7 @@ df['PER_u5'] = pd.qcut(gdf['PER_u5'],5,labels=False)
 df_temp = pd.DataFrame()
 df_temp["AVG_AM_TEMP"] = pd.qcut(gdf["AVG_AM_TEMP"], 5, labels=False)
 df_temp["AVG_AF_TEMP"] = pd.qcut(gdf["AVG_AF_TEMP"], 5, labels=False)
-#df_temp["AVG_PM_TEMP"] = pd.qcut(gdf["AVG_PM_TEMP"], 5, labels=False)
+df_temp["AVG_PM_TEMP"] = pd.qcut(gdf["AVG_PM_TEMP"], 5, labels=False)
 df_temp["AVG_AM_HI"] = pd.qcut(gdf["AVG_AM_HI"], 5, labels=False)
 df_temp["AVG_AF_HI"] = pd.qcut(gdf["AVG_AF_HI"], 5, labels=False)
 df_temp["AVG_PM_HI"] = pd.qcut(gdf["AVG_PM_HI"], 5, labels=False)
@@ -42,14 +42,15 @@ df_temp["AVG_PM_HI"] = pd.qcut(gdf["AVG_PM_HI"], 5, labels=False)
 
 def graph_map(indicator='PER_O65',layer=[]):
     fig = px.choropleth_mapbox(gdf, geojson=geojson, color=indicator,
-                           featureidkey="properties.GEOID20",
-                           locations="GEOID20",
-                           color_continuous_scale="Viridis",
+                           featureidkey="properties.GEOID10",
+                           locations="GEOID10",
+                           color_continuous_scale="thermal",
                            mapbox_style="carto-positron",
                            zoom=11, center = {"lat": 39.8289, "lon": -84.8902},
                            opacity=0.3
                           )
     fig.update_layout(margin={"r":0,"t":0,"l":0,"b":0})
+    fig.update_traces(marker_line_width=0)
     
     if len(layer) > 1:
         lat = layer[0]
@@ -105,7 +106,7 @@ temp_selection = dbc.Accordion([
             options =[
                 {"label": "Average Morning Temperature", "value":"AVG_AM_TEMP"},
                 {"label": "Average Afternoon Temperature", "value":"AVG_AF_TEMP"},
-                {"label": "Average Evening Temperature", "value":"AVG_PM_TEMP", "disabled": True},
+                {"label": "Average Evening Temperature", "value":"AVG_PM_TEMP"},
                 {"label": "Average Morning Heat Index", "value":"AVG_AM_HI"},
                 {"label": "Average Afternoon Heat Index", "value":"AVG_AF_HI"},
                 {"label": "Average Evening Heat Index", "value":"AVG_PM_HI"}
@@ -157,7 +158,7 @@ map_select_1 = dbc.Select(
         {"label": "Percent of Population over 25 without HS Diploma", "value": "PER_NO_HS_"},
         {"label": "Average Morning Temperature", "value":"AVG_AM_TEMP"},
         {"label": "Average Afternoon Temperature", "value":"AVG_AF_TEMP"},
-        {"label": "Average Evening Temperature", "value":"AVG_PM_TEMP", "disabled": True},
+        {"label": "Average Evening Temperature", "value":"AVG_PM_TEMP"},
         {"label": "Average Morning Heat Index", "value":"AVG_AM_HI"},
         {"label": "Average Afternoon Heat Index", "value":"AVG_AF_HI"},
         {"label": "Average Evening Heat Index", "value":"AVG_PM_HI"}
@@ -179,7 +180,7 @@ map_select_2 = dbc.Select(
         {"label": "Percent of Population over 25 without HS Diploma", "value": "PER_NO_HS_"},
         {"label": "Average Morning Temperature", "value":"AVG_AM_TEMP"},
         {"label": "Average Afternoon Temperature", "value":"AVG_AF_TEMP"},
-        {"label": "Average Evening Temperature", "value":"AVG_PM_TEMP", "disabled": True},
+        {"label": "Average Evening Temperature", "value":"AVG_PM_TEMP"},
         {"label": "Average Morning Heat Index", "value":"AVG_AM_HI"},
         {"label": "Average Afternoon Heat Index", "value":"AVG_AF_HI"},
         {"label": "Average Evening Heat Index", "value":"AVG_PM_HI"}
